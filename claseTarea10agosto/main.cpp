@@ -42,17 +42,17 @@ int main()
         if (time % timeRed == 0)
         {
             led1 = !led1;
-            cout << "led1 changed";
+            cout << "led1 changed\n";
         }
         if (time % timeGreen == 0)
         {
             led2 = !led2;
-            cout << "led2 changed";
+            cout << "led2 changed\n";
         }
         if (time % timeBlue == 0)
         {
             led3 = !led3;
-            cout << "led3 changed";
+            cout << "led3 changed\n";
         }
 
         ThisThread::sleep_for(1);
