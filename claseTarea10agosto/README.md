@@ -1,3 +1,19 @@
+#Integrantes
+Sebastian Ruiz Londoño y Santiago Yepes Mesa
+
+##Descriptcion Codigo
+En el coddigo previamente a la definicion del main, simplemente estamos importando <iostream> el cual nos servira para poder pedirle al usuario los tiempos a los cuales desea cambiar el parpadeo de los leds.
+Ya dentro de main, primero declaramos las cariables "redTime", "blue"TIme" y "greenTime", las cuales seran las variables que guardaran el tiempo de prendido / apagado de los leds.
+Desde la linea 18 a la 25 estamos simplemente pidiendole al usuario estos tiempos, y lo estamos guardando en las variables correspondientes.
+De la linea 28 a la 30 estamos inicializando los 3 leds en cuestion como objetos.
+Despues de eso incializamos una variable de tipo long long la cual se encarga de mantener el tiempo (en milisegundos), que ha pasado.
+De la linea 33 a 35 sencillamente estamos prendiendo los leds (cambiarlos de su estado original, apagado, a el otro estado, prendido).
+
+Siguientemente vene la parte que hace en verdad el trabajo. 
+Ahi lo que estamos haciendo es hacer un loop infinito en donde lo que se busca es que cada vez que el tiempo transcurrido sea un multiplo de uno de los tiempos dados por el usuario, el led en cuestion, del cual el tiempo es multiplo, va a cambiar de estado. Una vez se chequeen estos tiempos, ponemos el programa a dormirse por un milisegundo (la cual es la unidad en la cual medimos el tiempo) y le sumamos 1 a el tiempo transcurrido (ya que pusimos a esperar el programa 1 milisegundo).
+
+
+
 ![](./resources/official_armmbed_example_badge.png)
 # Blinky Mbed OS example
 
