@@ -1,7 +1,7 @@
 # Integrantes
 Sebastian Ruiz Londoño y Santiago Yepes Mesa
 
-## Descriptcion Codigo
+## Descripcion Codigo
 En el coddigo previamente a la definicion del main, simplemente estamos importando <iostream> el cual nos servira para poder pedirle al usuario los tiempos a los cuales desea cambiar el parpadeo de los leds.
 Ya dentro de main, primero declaramos las cariables "redTime", "blue"TIme" y "greenTime", las cuales seran las variables que guardaran el tiempo de prendido / apagado de los leds.
 Desde la linea 18 a la 25 estamos simplemente pidiendole al usuario estos tiempos, y lo estamos guardando en las variables correspondientes.
