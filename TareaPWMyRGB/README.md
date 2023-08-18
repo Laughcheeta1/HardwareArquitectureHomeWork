@@ -58,23 +58,23 @@ Las lineas 35 a la 47:
 ```
 Ocurre un ciclo infinito en el cual se va constantemente aumentando y decreciendo la "potencia" del led, esto se hace por medio de las siguientes lineas:
        
-    ```
-        ledR.write(pwm);
-        ThisThread::sleep_for(BLINKING_RATE);
+```
+    ledR.write(pwm);
+    ThisThread::sleep_for(BLINKING_RATE);
 
-        pwm += multiplier*0.05;
-    ```
+    pwm += multiplier*0.05;
+```
     
 Estas lineas, las cuales estan al inicio del ciclo, se encargan de sobre escribir cual es la potencia actual del led, y parar el codigo por `BLINKING_RATE` tiempo, esto con la finalidad de que se pueda apreciar de mejor manera el gradual aumento/decrecimiento de la intensidad, debajo de estas dos lineas se encuentra la linea de codigo la cual se encarga de sumarle al poder del led una cantidad `multiplier*0.05`, la cual dependiendo de si `multiplier` es un "1" o un "-1", va a sumar o a restarle en 0.05 a la intensidad del led.
 
 
-    ```
-        if (pwm >= 1.00 || pwm <= 0.00)
-        {
-            multiplier = -1 * multiplier;
-            cout << "entro: " << multiplier << "\n";
-        }        
-    ```
+```
+    if (pwm >= 1.00 || pwm <= 0.00)
+    {
+        multiplier = -1 * multiplier;
+        cout << "entro: " << multiplier << "\n";
+    }        
+```
         
 La finalidad de este if es que cuando la potencia (`pwm`) del Led llegue a 1 o a 0, el multiplicador cambie de signo, de esta manera si el poder llega a 1, el multiplicador pasara a ser "-1", por ende el poder empezara a bajar, debido a la multiplicacion mostrada anteriormente, a su vez, si la `pwm` llega a 0, el multiplicador pasara a ser "1", de esa manera en el ciclo sumando al `pwm`. La linea de abajo solo se encarga de mostrar en la terminal una confirmacion de que el `pwm` ha llegado a 0 o a 1.
 
