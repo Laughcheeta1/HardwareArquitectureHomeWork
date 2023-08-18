@@ -36,8 +36,8 @@ Las lineas de codigo 29 a la 33:
 ```
    
 Estas se encargan de inicializar las cosas que vamos a utilizar para prender y apagar el led de forma progresiva; estos son, el objeto "ledR" el cual es el cual es el led rojo de la board, inmediatamente despues vamos a definir cual va a ser el periodo de este led, aparte de esto tememos dos variables:
-        * pwm: es la que guarda la "potencia" de el led, va a ser usado para sobre escribir la potencia del led.
-        * multiplier: esta variable se encarga de ser la que dicta si el pwm va a aumentar o bajar, esto debido a que esta va a ser sencillamente un "1" o un "-1", lo cual mas adelante veremos como afecta el pwm.
+    * pwm: es la que guarda la "potencia" de el led, va a ser usado para sobre escribir la potencia del led.
+    * multiplier: esta variable se encarga de ser la que dicta si el pwm va a aumentar o bajar, esto debido a que esta va a ser sencillamente un "1" o un "-1", lo cual mas adelante veremos como afecta el pwm.
     
 Las lineas 35 a la 47:
    
