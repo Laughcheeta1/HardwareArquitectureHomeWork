@@ -35,7 +35,7 @@ Las lineas de codigo 29 a la 33:
     int multiplier = 1;
 ```
    
-    Estas se encargan de inicializar las cosas que vamos a utilizar para prender y apagar el led de forma progresiva; estos son, el objeto "ledR" el cual es el cual es el led rojo de la board, inmediatamente despues vamos a definir cual va a ser el periodo de este led, aparte de esto tememos dos variables:
+Estas se encargan de inicializar las cosas que vamos a utilizar para prender y apagar el led de forma progresiva; estos son, el objeto "ledR" el cual es el cual es el led rojo de la board, inmediatamente despues vamos a definir cual va a ser el periodo de este led, aparte de esto tememos dos variables:
         * pwm: es la que guarda la "potencia" de el led, va a ser usado para sobre escribir la potencia del led.
         * multiplier: esta variable se encarga de ser la que dicta si el pwm va a aumentar o bajar, esto debido a que esta va a ser sencillamente un "1" o un "-1", lo cual mas adelante veremos como afecta el pwm.
     
@@ -56,7 +56,7 @@ Las lineas 35 a la 47:
         }
     }
 ```
-    Ocurre un ciclo infinito en el cual se va constantemente aumentando y decreciendo la "potencia" del led, esto se hace por medio de las siguientes lineas:
+Ocurre un ciclo infinito en el cual se va constantemente aumentando y decreciendo la "potencia" del led, esto se hace por medio de las siguientes lineas:
        
     ```
         ledR.write(pwm);
@@ -64,8 +64,8 @@ Las lineas 35 a la 47:
 
         pwm += multiplier*0.05;
     ```
-       
-        Estas lineas, las cuales estan al inicio del ciclo, se encargan de sobre escribir cual es la potencia actual del led, y parar el codigo por `BLINKING_RATE`` tiempo, esto con la finalidad de que se pueda apreciar de mejor manera el gradual aumento/decrecimiento de la intensidad, debajo de estas dos lineas se encuentra la linea de codigo la cual se encarga de sumarle al poder del led una cantidad `multiplier*0.05`, la cual dependiendo de si `multiplier` es un "1" o un "-1", va a sumar o a restarle en 0.05 a la intensidad del led.
+    
+Estas lineas, las cuales estan al inicio del ciclo, se encargan de sobre escribir cual es la potencia actual del led, y parar el codigo por `BLINKING_RATE` tiempo, esto con la finalidad de que se pueda apreciar de mejor manera el gradual aumento/decrecimiento de la intensidad, debajo de estas dos lineas se encuentra la linea de codigo la cual se encarga de sumarle al poder del led una cantidad `multiplier*0.05`, la cual dependiendo de si `multiplier` es un "1" o un "-1", va a sumar o a restarle en 0.05 a la intensidad del led.
 
 
     ```
@@ -76,7 +76,7 @@ Las lineas 35 a la 47:
         }        
     ```
         
-        La finalidad de este if es que cuando la potencia (`pwm`) del Led llegue a 1 o a 0, el multiplicador cambie de signo, de esta manera si el poder llega a 1, el multiplicador pasara a ser "-1", por ende el poder empezara a bajar, debido a la multiplicacion mostrada anteriormente, a su vez, si la `pwm` llega a 0, el multiplicador pasara a ser "1", de esa manera en el ciclo sumando al `pwm`. La linea de abajo solo se encarga de mostrar en la terminal una confirmacion de que el `pwm` ha llegado a 0 o a 1.
+La finalidad de este if es que cuando la potencia (`pwm`) del Led llegue a 1 o a 0, el multiplicador cambie de signo, de esta manera si el poder llega a 1, el multiplicador pasara a ser "-1", por ende el poder empezara a bajar, debido a la multiplicacion mostrada anteriormente, a su vez, si la `pwm` llega a 0, el multiplicador pasara a ser "1", de esa manera en el ciclo sumando al `pwm`. La linea de abajo solo se encarga de mostrar en la terminal una confirmacion de que el `pwm` ha llegado a 0 o a 1.
 
 
 
@@ -123,7 +123,7 @@ Las lineas de la 54 a la 62:
     string input;
 ```
    
-    Se encarga de declarar una variable `input` la cual va a almacenar los colores que indica el usuario, declaramos los objetos de los tres leds, el rojo, verde y azul, y a su ves definimos cual va a ser el periodo de cada uno de estos.
+Se encarga de declarar una variable `input` la cual va a almacenar los colores que indica el usuario, declaramos los objetos de los tres leds, el rojo, verde y azul, y a su ves definimos cual va a ser el periodo de cada uno de estos.
 
 las lineas 64 a la 72:
 ```
@@ -138,7 +138,7 @@ las lineas 64 a la 72:
     }
 ```
    
-    Es donde se declara el ciclo infinito en el cual en todo momento se va a estar buscando por un input del usuario, y en caso de encontrarlo sobre escribe la potencia de cada led, para poder proyectar el color esperado por el usuario, la interpretacion de esots numeros hexadecimales a numeros de punto flotante, se hace por medio de la duncion `getNumber()`, la cual va a ser explicada mas abajo. Debido al formato hexadecimal del numero sabemos que siempre los dos primeros caracteres de este numero exadecimal van a corresponder a la intensidad del rojo, los dos siguientes a la intensidad del verde, y por ende los ultimos dos corresponden a la intensidad del azul, sin embargo al esperar que el usuario ingrese siempre un `#`, es por eso que empezamos a contar como primer numero hexadecimal a partir del caracter en la posicion 1 de `input`.
+Es donde se declara el ciclo infinito en el cual en todo momento se va a estar buscando por un input del usuario, y en caso de encontrarlo sobre escribe la potencia de cada led, para poder proyectar el color esperado por el usuario, la interpretacion de esots numeros hexadecimales a numeros de punto flotante, se hace por medio de la duncion `getNumber()`, la cual va a ser explicada mas abajo. Debido al formato hexadecimal del numero sabemos que siempre los dos primeros caracteres de este numero exadecimal van a corresponder a la intensidad del rojo, los dos siguientes a la intensidad del verde, y por ende los ultimos dos corresponden a la intensidad del azul, sin embargo al esperar que el usuario ingrese siempre un `#`, es por eso que empezamos a contar como primer numero hexadecimal a partir del caracter en la posicion 1 de `input`.
 
 
 
