@@ -79,6 +79,6 @@ int getNumber()
 ```
 La función getNumber() es responsable de obtener un número del usuario y convertirlo en el valor apropiado para iluminar los segmentos correspondientes en la pantalla de 7 segmentos. Comienza solicitando al usuario que ingrese un número. Luego, lee un carácter de la entrada usando cin.
 
-Si el carácter ingresado es un dígito (0-9), la función utiliza una serie de declaraciones if para asignar el carácter del dígito al valor correspondiente que debe escribirse en el objeto leds. Es probable que estos valores representen qué segmentos de la pantalla de 7 segmentos deben activarse para mostrar el dígito específico. Luego, la función devuelve este valor.
+Si el carácter ingresado es un dígito (0-9), la función utiliza una serie de declaraciones if para asignar el carácter del dígito al valor correspondiente que debe escribirse en el objeto leds. Estos valores representan los valores binarios los cuales representan que segmentos deben activarse para mostrar el dígito específico. Luego, la función devuelve este valor.
 
 Si el carácter ingresado no es un dígito, la función imprime un mensaje de error y devuelve -1 para indicar una entrada no válida.
