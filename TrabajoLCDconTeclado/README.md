@@ -5,85 +5,96 @@
 # Descripcion Codigo
 ### Previo al Main
 ```
-    #include "mbed.h"
-    #include <iostream>
-    #include <string>
+    #include "Keyboard.h"
+#include "mbed.h"
+#include "Keypad.h"
+#include "TextLCD.h"
+#include "iostream"
+#include "string"
+#include <cmath>
+#include <cstdio>
+#include <vector>
 
-    using namespace std;
 
-    #define BLINKING_RATE 50ms
+using namespace std;
 
-    void turnOnOffLed();
-    void makeColors();
-    float getNumber(char firstNumber, char secondNumber); 
+// Methods we are going to use
+void app1();
+void app2();
+void app3();
+
+// Create the display and keyboard object
+TextLCD display(D2, D3, D4, D5, D6, D7, TextLCD::LCD16x2);
+keyboard k;
+
 ```
-En las linea previa al main vamo a importar la librerias que vamos a usar, el nombre del espacio, definimos una macro `BLINKING_RATE` la cual se encarga de reemplazar `50ms`, despues de esto declaramos los prototipos de las funciones que vamos a usar durante el codigo.
+En el código previo al main se importan diferentes librerías para el correcto funcionamiento del programa: "Keypad.h" se importa para el teclado que se va a utilizar, "TextLCD.h" para la pantalla LCD y las otras librerías son propias de C++ y C.
+Posteriormente se declaran las tres funciones principales del programa (Las tres aplicaciones que el usuario va a poder utilizar).
+Por último se crean el objeto "display" para controlar la pantalla LCD y y el objeto "k" para el teclado. El constructor de TextLCD recibe pines como argumentos para configurar la pantalla LCD.
 
 
-### main()
-La funcion `main()` se encarga de ejecutar uno de los dos metodos `turnOnOffLed()` o `makeColors()`;
+### greet()
+```
+void greet()
+{
+    display.cls();
+    ThisThread::sleep_for(10ms);
+    display.printf("Bienvenido");
+    ThisThread::sleep_for(2s);
+    display.cls();
+}
+```
+La función greet() tiene como finalidad mostrar un mensaje de saludo en la pantalla y posteriormente borra lo que esta en pantalla.
 
-### turnOffLed()
-Las lineas de codigo 29 a la 33:
-
+### main2()
     
 ```
-    PwmOut ledR(LED1);
-    ledR.period(0.01);
+    void main2()
+{
+        display.cls();
+        ThisThread::sleep_for(10ms);
+        display.printf("Select app: (1, 2, 3)");
+        ThisThread::sleep_for(2s);
+        display.cls();
+        int c = k.getPressedNumber();
 
-    float pwm = 0.00;
-    int multiplier = 1;
-```
-   
-Estas se encargan de inicializar las cosas que vamos a utilizar para prender y apagar el led de forma progresiva; estos son, el objeto "ledR" el cual es el cual es el led rojo de la board, inmediatamente despues vamos a definir cual va a ser el periodo de este led, aparte de esto tememos dos variables:
-    * pwm: es la que guarda la "potencia" de el led, va a ser usado para sobre escribir la potencia del led.
-    * multiplier: esta variable se encarga de ser la que dicta si el pwm va a aumentar o bajar, esto debido a que esta va a ser sencillamente un "1" o un "-1", lo cual mas adelante veremos como afecta el pwm.
-    
-Las lineas 35 a la 47:
-   
-```
-    while (true)
-    {
-        ledR.write(pwm);
-        ThisThread::sleep_for(BLINKING_RATE);
-
-        pwm += multiplier*0.05;
-
-        if (pwm >= 1.00 || pwm <= 0.00)
+        while (c < 1 || c > 3)
         {
-            multiplier = -1 * multiplier;
-            cout << "entro: " << multiplier << "\n";
+            display.cls();
+            display.printf("Enter a valid app");
+            ThisThread::sleep_for(2s);
+            display.cls();
+            c = k.getPressedNumber();
+            
         }
-    }
+
+        display.cls();
+        display.printf("Selected app is %d", c);
+        ThisThread::sleep_for(2s);
+        display.cls();
+
+        if (c == 1)
+            app1();
+        if (c == 2)
+            app2();
+        if (c == 3)
+            app3();
+}
 ```
-Ocurre un ciclo infinito en el cual se va constantemente aumentando y decreciendo la "potencia" del led, esto se hace por medio de las siguientes lineas:
-       
-```
-    ledR.write(pwm);
-    ThisThread::sleep_for(BLINKING_RATE);
-
-    pwm += multiplier*0.05;
-```
-    
-Estas lineas, las cuales estan al inicio del ciclo, se encargan de sobre escribir cual es la potencia actual del led, y parar el codigo por `BLINKING_RATE` tiempo, esto con la finalidad de que se pueda apreciar de mejor manera el gradual aumento/decrecimiento de la intensidad, debajo de estas dos lineas se encuentra la linea de codigo la cual se encarga de sumarle al poder del led una cantidad `multiplier*0.05`, la cual dependiendo de si `multiplier` es un "1" o un "-1", va a sumar o a restarle en 0.05 a la intensidad del led.
-
-
-```
-    if (pwm >= 1.00 || pwm <= 0.00)
-    {
-        multiplier = -1 * multiplier;
-        cout << "entro: " << multiplier << "\n";
-    }        
-```
-        
-La finalidad de este if es que cuando la potencia (`pwm`) del Led llegue a 1 o a 0, el multiplicador cambie de signo, de esta manera si el poder llega a 1, el multiplicador pasara a ser "-1", por ende el poder empezara a bajar, debido a la multiplicacion mostrada anteriormente, a su vez, si la `pwm` llega a 0, el multiplicador pasara a ser "1", de esa manera en el ciclo sumando al `pwm`. La linea de abajo solo se encarga de mostrar en la terminal una confirmacion de que el `pwm` ha llegado a 0 o a 1.
+   
+La función main2() inicialmente borra la pantalla y después le pide al usuario que ingrese un número para seleccionar la aplicación que desea utilizar(un número entre el 1 y el 3). El programa verifica con el while que el usuario ingrese un número válido, de lo contrario el programa le continúa pidiendo un número válido hasta que se ingrese uno. Una vez que se ingrese un número válido se muestra en pantalla la aplicación seleccionada y por último el programa llama a la función correspondiente a la aplicación seleccionada.
 
 
 
-### makeColors()
+### app3()
 
 ```
-    cout << "Format: #FFFFFF\n";
+    void app3()
+{
+    display.cls();
+    display.printf("app 3 selected");
+    ThisThread::sleep_for(2s);
+    display.cls();
 
     PwmOut red(LED1);
     PwmOut green(LED2);
@@ -93,85 +104,188 @@ La finalidad de este if es que cuando la potencia (`pwm`) del Led llegue a 1 o a
     green.period(0.01);
     blue.period(0.01);
 
-    string input;
+    display.cls();
+    display.printf("ingrese numero rojo ");
+    ThisThread::sleep_for(2s);
+    display.cls();
 
-    while (true)
-    {
-        if (getline(cin, input))    
-        {
-            red.write(getNumber(input[1], input[2]));
-            green.write(getNumber(input[3], input[4]));
-            blue.write(getNumber(input[5], input[6]));
-        }
-    }
-```
-
-La linea 52 se encarga de informar por consola al usario el formato esperado de color, este formato corresponde a la forma hexadecimal de un color (ej: #F3A008):
-    ```cout << "Format: #FFFFFF\n";```
-
-Las lineas de la 54 a la 62:
-   
-```
-    PwmOut red(LED1);
-    PwmOut green(LED2);
-    PwmOut blue(LED3);
-
-    red.period(0.01);
-    green.period(0.01);
-    blue.period(0.01);
-
-    string input;
-```
-   
-Se encarga de declarar una variable `input` la cual va a almacenar los colores que indica el usuario, declaramos los objetos de los tres leds, el rojo, verde y azul, y a su ves definimos cual va a ser el periodo de cada uno de estos.
-
-las lineas 64 a la 72:
-```
-    while (true)
-    {
-        if (getline(cin, input))    
-        {
-            red.write(getNumber(input[1], input[2]));
-            green.write(getNumber(input[3], input[4]));
-            blue.write(getNumber(input[5], input[6]));
-        }
-    }
-```
-   
-Es donde se declara el ciclo infinito en el cual en todo momento se va a estar buscando por un input del usuario, y en caso de encontrarlo sobre escribe la potencia de cada led, para poder proyectar el color esperado por el usuario, la interpretacion de esots numeros hexadecimales a numeros de punto flotante, se hace por medio de la duncion `getNumber()`, la cual va a ser explicada mas abajo. Debido al formato hexadecimal del numero sabemos que siempre los dos primeros caracteres de este numero exadecimal van a corresponder a la intensidad del rojo, los dos siguientes a la intensidad del verde, y por ende los ultimos dos corresponden a la intensidad del azul, sin embargo al esperar que el usuario ingrese siempre un `#`, es por eso que empezamos a contar como primer numero hexadecimal a partir del caracter en la posicion 1 de `input`.
-
-
-
-### getNumber()
-
-```
-    float result = 0;
-
-    if (isdigit(firstNumber))
-    {
-        result += 16 * (firstNumber - '0');
-    }
-    else
-    {
-        result += 16 * (tolower(firstNumber) - 'a' + 10);
+    float number1 = (float)k.getPressedNumber();
+    while (number1 > 255 || number1 < 0)
+    {   
+        display.cls();
+        display.printf("numero no valido, de nuevo");
+        ThisThread::sleep_for(2s);
+        display.cls();
+        number1 = k.getPressedNumber();
     }
 
-    if (isdigit(secondNumber))
+    display.cls();
+    display.printf("ingrese numero verde ");
+    ThisThread::sleep_for(2s);
+    display.cls();
+    float number2 = (float)k.getPressedNumber();
+    while (number2 > 255 || number2 < 0)
     {
-        result += secondNumber - '0';
-    }
-    else
-    {
-        result += tolower(secondNumber) - 'a' + 10;
+        display.cls();
+        display.printf("numero no valido, de nuevo");
+        ThisThread::sleep_for(2s);
+        display.cls();
+        number2 = k.getPressedNumber();
     }
 
-    return result / 1000;
+    display.cls();
+    display.printf("ingrese numero azul");
+    ThisThread::sleep_for(2s);
+    display.cls();
+    float number3 = (float)k.getPressedNumber();
+    while (number3 > 255 || number3 < 0)
+    {
+        display.cls();
+        display.printf("numero no valido, de nuevo");
+        ThisThread::sleep_for(2s);
+        display.cls();
+        number3 = k.getPressedNumber();
+    }
+
+    red.write(1 - (number1 / 255));
+    green.write(1 - (number2 / 255));
+    blue.write(1 - (number3 / 255));
+
+    display.cls();
+    display.printf("Listo! App 3 terminada");
+    ThisThread::sleep_for(2s);
+    display.cls();
+}
 ```
 
-Esta funcion se encarga de dado dos caracteres hexadecimales, siendo uno de ellos el correspondiente a los decenas (`firstNumber`) y el otro a las unidades (`secondNumber`), devuelva una variable en forma de punto flotante entre 0 y 1. 
+Inicialmente la función app3() borra la pantalla y muestra "app 3 selected" para indicar que la aplicación 3 está seleccionada. Posteriormente configura tres LED (rojo, verde y azul) como salidas PWM para controlar su intensidad luminosa. Después le pide al usuario que ingrese un número del 0 al 255 para representar la intensidad del color rojo y verifica si el número ingresado es válido, de lo contrario le vuelve a pedir al usuario que ingrese un número válido hasta que se ingrese uno. La función repite este proceso para determinar la intensidad del color verde y el azul. Por último el método convierte estos valores ingresados al porcentaje con respecto a 255 y muestra el color que se da como resultado de la combianción de estos tres colores anteriormente mencionados y muestra en pantalla: "Listo! App 3 terminada".
 
-Esto lo hace por medio de para cada una de las variables evaluar si es un numero, en cuyo caso sencillamente decimos que dicho caracter representa a ese numero, en caso de que sea una letra, encontrarmos el valor que representa esa letra, por medio de una simple operacion matematica, aprovechando los valores ASCII.
 
-Primero declaramos una variable tipo float `result`, la cual se encarga de guardar el resultado, luego hacemos el proceso descrito anteriormente, y por ultimo una vez tenemos el resultado, este no esta entre 0 y 1, por ende al devolver el resultado, lo devolvemos dividiendolo por 1000, para que asi quede entre 0 y 1. Escogemos deividir por 1000 especificamente, devido a que en un sistema hexadecimal, el maximo numero que podemos alcanzar con dos numero es 255.
+### app2()
 
-Para el caso de `firstNumber` el numero que representa lo multiplicamos por 16, devido a que representa las decenas y lo añadimos a resultado; por otro lado `secondNumber` no lo multiplicamos por nada debido a que representa las unidades, y lo sumamos a `resultado`.
+```
+    void app2()
+{
+    display.cls();
+    display.printf("app 2 selected");
+    ThisThread::sleep_for(2s);
+    display.cls();
+
+    display.cls();
+    display.printf("Ingrese una nota del 0 al 10");
+    ThisThread::sleep_for(2s);
+    display.cls();
+
+    int i = k.getPressedNumber();
+    while (i > 10 || i < 0)
+    {
+        display.cls();
+        display.printf("numero no valido, de nuevo");
+        ThisThread::sleep_for(2s);
+        display.cls();
+
+        i = k.getPressedNumber();
+    }
+
+    display.cls();
+    if (i <= 3 && i >= 0)
+        display.printf("A");
+    else if (i <= 4 && i > 3)
+        display.printf("B");
+    else if (i <= 5 && i > 4)
+        display.printf("C");
+    else if (i <= 7 && i > 5)
+        display.printf("D");
+    else if (i < 9 && i > 7)
+        display.printf("E");
+    else if (i <= 10 && i >= 9)
+        display.printf("F");
+    ThisThread::sleep_for(2s);
+    display.cls();
+
+    display.cls();
+    display.printf("Listo! App 2 terminada");
+    ThisThread::sleep_for(2s);
+    display.cls();
+}
+
+```
+La función app2() inicialmente borra la pantalla y muestra en pantalla "app 2 selected" para indicar la aplicación seleccionada. Posteriormente le pide un número al usuario entre el 1 y el 10 (el método siempre revisa si el numero ingresado está entre 1 y 10, de lo contrario el metodo pide nuevamente el número hasta que se ingrese un número válido). Una vez ingresado el número el método le muestra al usuario una letra mayúscula (desde la A hasta la F) según el numero que se haya ingresado. Por último muestra: "Listo! App 2 terminada" para indicar que se terminó la operación de la función y borra la pantalla.
+
+### app1()
+
+```
+    void app1()
+{
+    display.cls();
+    display.printf("app 1 selected");
+    ThisThread::sleep_for(2s);
+    display.cls();
+
+    display.cls();
+    display.printf("La forma del polinomio es: a*(x^2) + b*x + c");
+    ThisThread::sleep_for(2s);
+    display.cls();
+    display.printf("ingrese por favor el valor de la a");
+    ThisThread::sleep_for(2s);
+    display.cls();
+    int a = k.getPressedNumber();
+
+    display.cls();
+    display.printf("ingrese el valor de la b");
+    ThisThread::sleep_for(2s);
+    display.cls();
+    int b = k.getPressedNumber();
+
+    display.cls();
+    display.printf("ingrese el valor de la c");
+    ThisThread::sleep_for(2s);
+    display.cls();
+    int c = k.getPressedNumber();
+
+    bool imaginary = false;
+
+    int interRaiz = b*b - 4*a*c;
+
+    if (interRaiz < 0)
+        imaginary = true;
+
+    interRaiz = abs(interRaiz);
+    
+    if (imaginary)
+    {   display.cls();
+        display.printf("resultado: (%d + %fi) / %d", -b, sqrt(interRaiz), 2*a);
+        ThisThread::sleep_for(2s);
+        display.cls();
+
+        display.cls();
+        display.printf("resultado: (%d - %fi) / %d", -b, sqrt(interRaiz), 2*a);
+        ThisThread::sleep_for(2s);
+        display.cls();
+    }
+    else 
+    {
+        display.cls();
+        display.printf("resultados: %f o %f", (-b + sqrt(interRaiz)) / (2*a), (-b - sqrt(interRaiz)) / (2*a));
+        ThisThread::sleep_for(2s);
+        display.cls();
+    }
+
+    display.cls();
+    display.printf("Listo! App 1 terminada");
+    ThisThread::sleep_for(2s);
+    display.cls();
+}
+
+```
+
+La función app1() inicialmente borra la pantalla y muestra "app 1 selected" para indicar la aplicación seleccionada. Esta funcion permite al usuario ingresar coeficientes de un polinomio cuadrático y calcula sus raíces. Las respuestas que tengan números imaginarios se dejan indicadas.
+
+El pide al usuario el valor de `a`, `b` y `c`, los cuales son las partes que componen un polinomio cuadrático (a*(x^2) + b*x + c).
+Después declara una variable booleana `imaginary`, la cual guarda si la respuesta va a ser compleja (contener un imaginario) o no, e inicialmente se establece como falsa.
+
+Se calcula el determinante (la parte interior de la raíz, `interRaiz`) de la formula de la solucion de una ecuación cuadrática y se verifica si este (`interRaiz`) es negativo. Si lo es, se establece `imaginary` en true, lo que indica que las raíces serán números complejos. Si `imaginary` es true, se imprime la solución en formato de número complejo. Si `imaginary` es false, se imprime la solución calculada. Para las soluciones se muestran ambas, cuando la formula es b + raiz y cuando es b - raiz.
+
+Por último la función muestra: "Listo! App 1 terminada" para indicar que se terminó la operación y se borra la pantalla.
+
+
